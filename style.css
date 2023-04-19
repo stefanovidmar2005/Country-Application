@@ -1,0 +1,58 @@
+:root {
+  --body-color: #fefaed;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.body {
+  background-color: var(--body-color);
+}
+.header {
+  text-align: center;
+  padding: 0.5rem;
+}
+.alert {
+  display: block;
+  text-align: center;
+}
+.cards {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 2rem 3rem;
+  gap: 2rem;
+}
+.countryFlag {
+  width: 100%;
+  height: 13.3125rem;
+}
+.card {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  background-color: #fff;
+  width: 20rem;
+  border-radius: 10px;
+  overflow: hidden;
+  padding-bottom: 1.5rem;
+  height: 30rem;
+}
+.card__content {
+  padding: 0 2rem;
+}
+.countryName {
+  margin-top: 2rem;
+  font-size: 25px;
+  margin-bottom: 0;
+}
+.countryRegion {
+  text-transform: uppercase;
+  color: #777;
+  font-size: 13px;
+}
+.card__description {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
