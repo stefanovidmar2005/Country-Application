@@ -255,7 +255,7 @@ const fetchData = (countryName) => {
 </div>`;
     // return the html back to the page with the counties data
     cardsContainer.insertAdjacentHTML("beforeend", html);
-  }, 2000);
+  }, 3000);
 };
 country_list.forEach((countryName) => {
   fetchData(countryName);
