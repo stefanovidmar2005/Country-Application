@@ -1,6 +1,6 @@
 "use strict";
 
-const country_list = [
+const COUNTRY_LIST = [
   "Afghanistan",
   "Albania",
   "Algeria",
@@ -257,6 +257,6 @@ const fetchData = (countryName) => {
     cardsContainer.insertAdjacentHTML("beforeend", html);
   });
 };
-country_list.forEach((countryName) => {
+COUNTRY_LIST.forEach((countryName) => {
   fetchData(countryName);
 });
