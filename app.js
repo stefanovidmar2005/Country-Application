@@ -217,8 +217,8 @@ const fetchData = (countryName) => {
 
   request.send();
 
-  setTimeout(() => {
-    if (request.status !== 200) return;
+  request.addEventListener("load", () => {
+    // data fetched from the server
     let [fullRetrievedData] = JSON.parse(request.responseText);
     // 1. Population of country & region of Country
     const { region, population } = fullRetrievedData;
@@ -255,7 +255,7 @@ const fetchData = (countryName) => {
 </div>`;
     // return the html back to the page with the counties data
     cardsContainer.insertAdjacentHTML("beforeend", html);
-  }, 3000);
+  });
 };
 country_list.forEach((countryName) => {
   fetchData(countryName);
