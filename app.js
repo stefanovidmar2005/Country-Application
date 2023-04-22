@@ -7,7 +7,7 @@ const COUNTRY_LIST = [
   "Andorra",
   "Angola",
   "Anguilla",
-  "Antigua &amp; Barbuda",
+  "Ant Barbuda",
   "Argentina",
   "Armenia",
   "Aruba",
@@ -25,7 +25,7 @@ const COUNTRY_LIST = [
   "Bermuda",
   "Bhutan",
   "Bolivia",
-  "Bosnia &amp; Herzegovina",
+  "Bosnia",
   "Botswana",
   "Brazil",
   "British Virgin Islands",
@@ -156,7 +156,7 @@ const COUNTRY_LIST = [
   "Romania",
   "Russia",
   "Rwanda",
-  "Saint Pierre &amp; Miquelon",
+  "Saint Pierre Miquelon",
   "Samoa",
   "San Marino",
   "Satellite",
@@ -172,7 +172,7 @@ const COUNTRY_LIST = [
   "South Korea",
   "Spain",
   "Sri Lanka",
-  "St Kitts &amp; Nevis",
+  "St Kitts Nevis",
   "St Lucia",
   "St Vincent",
   "St. Lucia",
@@ -189,11 +189,11 @@ const COUNTRY_LIST = [
   "Timor L'Este",
   "Togo",
   "Tonga",
-  "Trinidad &amp; Tobago",
+  "Trinidad Tobago",
   "Tunisia",
   "Turkey",
   "Turkmenistan",
-  "Turks &amp; Caicos",
+  "Turks Caicos",
   "Uganda",
   "Ukraine",
   "United Arab Emirates",
@@ -210,53 +210,114 @@ const COUNTRY_LIST = [
 
 const BASE_URL = `https://restcountries.com/v3.1/name/`;
 const cardsContainer = document.querySelector(".cards");
-const fetchData = (countryName) => {
-  const request = new XMLHttpRequest();
 
-  request.open("GET", `${BASE_URL}/${countryName}?fullText=true`);
+///////////////////////////////////////////////////////////////////
+// AJAX METHOD
+// const fetchData = (countryName) => {
+//   const request = new XMLHttpRequest();
 
-  request.send();
+//   request.open("GET", `${BASE_URL}/${countryName}?fullText=true`);
 
-  request.addEventListener("load", () => {
-    // data fetched from the server
-    let [fullRetrievedData] = JSON.parse(request.responseText);
-    // 1. Population of country & region of Country
-    const { region, population } = fullRetrievedData;
-    // 2. Language of country
-    const language = Object.values(fullRetrievedData.languages).pop();
-    // 3. Currency of country
-    const currency = Object.values(fullRetrievedData.currencies).pop().name;
-    // 4. Flag of country
-    const { png } = fullRetrievedData.flags;
-    // 5. Name of country
-    const { common } = fullRetrievedData.name;
+//   request.send();
 
-    // html
-    const html = `<div class="card">
-<img class="countryFlag" src="${png}" alt="" />
-<div class="card__content">
-  <div class="card__heading">
-    <h3 class="countryName">${common}</h3>
-    <h4 class="countryRegion">${region}</h4>
-    <div class="card__description">
-      🧑‍🤝‍🧑
-      <p>${String(population)} people</p>
+//   request.addEventListener("load", () => {
+// data fetched from the server
+//     let [fullRetrievedData] = JSON.parse(request.responseText);
+// 1. Population of country & region of Country
+//     const { region, population } = fullRetrievedData;
+// 2. Language of country
+//     const language = Object.values(fullRetrievedData.languages).pop();
+// 3. Currency of country
+//     const currency = Object.values(fullRetrievedData.currencies).pop().name;
+// 4. Flag of country
+//     const { png } = fullRetrievedData.flags;
+// 5. Name of country
+//     const { common } = fullRetrievedData.name;
+
+// html
+//     const html = `<div class="card">
+// <img class="countryFlag" src="${png}" alt="" />
+// <div class="card__content">
+//   <div class="card__heading">
+//     <h3 class="countryName">${common}</h3>
+//     <h4 class="countryRegion">${region}</h4>
+//     <div class="card__description">
+//       🧑‍🤝‍🧑
+//       <p>${String(population)} people</p>
+//     </div>
+//     <div class="card__description">
+//       🗣️
+//       <p>${language}</p>
+//     </div>
+//     <div class="card__description">
+//       💰
+//       <p>${currency}</p>
+//     </div>
+//   </div>
+// </div>
+// </div>`;
+// return the html back to the page with the counties data
+//     cardsContainer.insertAdjacentHTML("beforeend", html);
+//   });
+// };
+
+// COUNTRY_LIST.forEach((country) => fetchData(country));
+
+// FETCH FUNCTION with promises
+
+const getCountryList = (countryName) => {
+  // lets break it down into small explanations
+
+  // 1. the fetch function takes a couple of arguments the first one being the url it will send a request to get the data from
+  // 2. we are using the .then method and that takes a callback to be invoked when the promise is resolved.
+  // 3. we are then using this response.json method which creates a new promise this json method allows us to get the data in the right format however since we created a new promise we have to call another .then and pass in a calback function to be invoked when the promise is resolved.
+  // 4. and at last we logged the responsedata after its been converted into JSON to the console.
+
+  // couple of things to keep in mind:
+  // 1. the .then method is a method that can only be used on promises so its available on its namespace you can say
+  // 2. the .json method is also a method avaliable on any response object returned from the prior fulfilled promise
+
+  fetch(`${BASE_URL}${countryName}`).then((response) =>
+    response.json().then((responseData) => {
+      const [data] = responseData;
+      // 1. Population of country & region of Country
+      const { region, population } = data;
+      // 2. Language of country
+      const language = Object.values(data.languages).pop();
+      // 3. Currency of country
+      const currency = Object.values(data.currencies).pop().name;
+      // 4. Flag of country
+      const { png } = data.flags;
+      // 5. Name of country
+      const { common } = data.name;
+
+      const html = `
+      <div class="card">
+          <img class="countryFlag" src="${png}" alt="" />
+        <div class="card__content">
+          <div class="card__heading">
+            <h3 class="countryName">${common}</h3>
+            <h4 class="countryRegion">${region}</h4>
+            <div class="card__description">
+              🧑‍🤝‍🧑
+              <p>${String(population)} people</p>
+            </div>
+            <div class="card__description">
+              🗣️
+              <p>${language}</p>
+            </div>
+            <div class="card__description">
+              💰
+              <p>${currency}</p>
+            </div>
+          </div>
+        </div>
     </div>
-    <div class="card__description">
-      🗣️
-      <p>${language}</p>
-    </div>
-    <div class="card__description">
-      💰
-      <p>${currency}</p>
-    </div>
-  </div>
-</div>
-</div>`;
-    // return the html back to the page with the counties data
-    cardsContainer.insertAdjacentHTML("beforeend", html);
-  });
+`;
+      // return the html back to the page with the counties data
+      cardsContainer.insertAdjacentHTML("beforeend", html);
+    })
+  );
 };
-COUNTRY_LIST.forEach((countryName) => {
-  fetchData(countryName);
-});
+
+COUNTRY_LIST.forEach((country) => getCountryList(country));
