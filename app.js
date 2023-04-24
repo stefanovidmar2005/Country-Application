@@ -208,7 +208,7 @@ const COUNTRY_LIST = [
   "Zimbabwe",
 ];
 
-const BASE_URL = `https://restcountries.com/v3.1/name/`;
+const BASE_URL = `https://restcountries.com/v3.1/`;
 const cardsContainer = document.querySelector(".cards");
 
 ///////////////////////////////////////////////////////////////////
@@ -277,8 +277,57 @@ const getCountryList = (countryName) => {
   // 1. the .then method is a method that can only be used on promises so its available on its namespace you can say
   // 2. the .json method is also a method avaliable on any response object returned from the prior fulfilled promise
 
-  fetch(`${BASE_URL}${countryName}`).then((response) =>
-    response.json().then((responseData) => {
+  fetch(`${BASE_URL}name/${countryName}`)
+    .then((response) =>
+      response.json().then((responseData) => {
+        const [data] = responseData;
+        // 1. Population of country & region of Country
+        const { region, population } = data;
+        // 2. Language of country
+        const language = Object.values(data.languages).pop();
+        // 3. Currency of country
+        const currency = Object.values(data.currencies).pop().name;
+        // 4. Flag of country
+        const { png } = data.flags;
+        // 5. Name of country
+        const { common } = data.name;
+        const neighbour = data?.borders[0];
+        const html = `
+      <div class="card">
+          <img class="countryFlag" src="${png}" alt="" />
+        <div class="card__content">
+          <div class="card__heading">
+            <h3 class="countryName">${common}</h3>
+            <h4 class="countryRegion">${region}</h4>
+            <div class="card__description">
+              🧑‍🤝‍🧑
+              <p>${String(population)} people</p>
+            </div>
+            <div class="card__description">
+              🗣️
+              <p>${language}</p>
+            </div>
+            <div class="card__description">
+              💰
+              <p>${currency}</p>
+            </div>
+          </div>
+        </div>
+    </div>
+`;
+        // return the html back to the page with the counties data
+        cardsContainer.insertAdjacentHTML("beforeend", html);
+
+        return neighbour; // here we have to return the neigbourse in order for the next .then to be able to have acess to that value so we can re fetch the data for the neigbour country
+      })
+    )
+    // this callback the paramater passed in is the promise that is returned from the previous callback
+    .then((neighbour) =>
+      fetch(`${BASE_URL}alpha/${neighbour}
+  `)
+    )
+    .then((response) => response.json())
+    .then((responseData) => {
       const [data] = responseData;
       // 1. Population of country & region of Country
       const { region, population } = data;
@@ -290,9 +339,8 @@ const getCountryList = (countryName) => {
       const { png } = data.flags;
       // 5. Name of country
       const { common } = data.name;
-
       const html = `
-      <div class="card">
+      <div class="card card__neighbour">
           <img class="countryFlag" src="${png}" alt="" />
         <div class="card__content">
           <div class="card__heading">
@@ -316,8 +364,7 @@ const getCountryList = (countryName) => {
 `;
       // return the html back to the page with the counties data
       cardsContainer.insertAdjacentHTML("beforeend", html);
-    })
-  );
+    });
 };
 
 COUNTRY_LIST.forEach((country) => getCountryList(country));

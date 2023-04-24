@@ -36,7 +36,10 @@
   border-radius: 10px;
   overflow: hidden;
   padding-bottom: 1.5rem;
-  height: 30rem;
+  height: 33rem;
+}
+.card__neighbour {
+  border: 5px solid black;
 }
 .card__content {
   padding: 0 2rem;
